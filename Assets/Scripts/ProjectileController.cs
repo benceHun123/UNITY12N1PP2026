@@ -9,9 +9,19 @@ public class ProjectileController : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-        _rigidbody.AddForce(
-            new Vector2(1, 0) * _missleSpeed,
-            ForceMode2D.Impulse);
+
+        if (transform.localRotation.z > 0)
+        {
+            _rigidbody.AddForce(
+                new Vector2(-1, 0) * _missleSpeed,
+                ForceMode2D.Impulse);
+        }
+        else
+        {
+            _rigidbody.AddForce(
+                new Vector2(1, 0) * _missleSpeed,
+                ForceMode2D.Impulse);
+        }
 
         Destroy(gameObject, _aliveTime);
     }

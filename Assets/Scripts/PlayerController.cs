@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 
@@ -18,6 +19,14 @@ public class PlayerController : MonoBehaviour
     private bool facingRight;
     private bool isGrounded;
 
+    //shooting variables
+    [SerializeField] Transform _gunTip;
+    [SerializeField] GameObject _projectilePrefab;
+    [SerializeField] float _fireRate = 0.5f;
+
+    private float _nextFireTime = 0f;
+
+
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -34,6 +43,23 @@ public class PlayerController : MonoBehaviour
             _animator.SetBool("isGrounded", false);
             isGrounded = false;
             _rigidbody.AddForce(new Vector2(0, _jumpHeight));
+        }
+
+        //shooting
+        if(Input.GetAxisRaw("Fire1") >0)
+        {
+            if(Time.time >= _nextFireTime)
+            {
+                _nextFireTime = Time.time + _fireRate;
+                if (facingRight)
+                {
+                    Instantiate(_projectilePrefab, _gunTip.position, Quaternion.identity);
+                }
+                else
+                {
+                    Instantiate(_projectilePrefab, _gunTip.position, Quaternion.Euler(0, 0, 180f));
+                }
+            }
         }
     }
 
